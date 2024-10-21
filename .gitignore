@@ -4,6 +4,9 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 .env
+certificate.crt
+certificate.csr
+private.key
 
 # User-specific files
 *.rsuser
