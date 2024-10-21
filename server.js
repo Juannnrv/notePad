@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
+const { errorHandler } = require('./server/middleware/errorHandler');
 const db = require("./server/db/db");
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(errorHandler);
 
 db.getInstace();
 
