@@ -3,8 +3,10 @@ const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
 const { errorHandler } = require('./server/middleware/errorHandler');
-const db = require("./server/db/db");
+const db = require("./server/helpers/db");
 const app = express();
+const userRouter = require("./server/routes/userRouter");
+const noteRouter = require("./server/routes/noteRouter");
 
 app.use(
   cors({
@@ -12,14 +14,19 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
-app.use(errorHandler);
 
 db.getInstace();
 
-// Cargar certificado y clave privada
+// Cargar certificado y clave privada para HTTPS
 const privateKey = fs.readFileSync("./private.key");
 const certificate = fs.readFileSync("./certificate.crt");
+
+app.use("/notes", noteRouter);
+// app.use("/users", userRouter);
+
+app.use(errorHandler);
 
 // Crear servidor HTTPS
 const httpsServer = https.createServer(
@@ -29,10 +36,6 @@ const httpsServer = https.createServer(
   },
   app
 );
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
 const PORT = process.env.PORT || 5000;
 httpsServer.listen(PORT, () => {
