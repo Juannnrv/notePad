@@ -10,8 +10,12 @@ class NoteController {
    * @returns {Promise<void>} - A promise that resolves when the notes are retrieved.
    */
   static async getNotes(req, res) {
+    const userId = req.auth._id;
     try {
-      const notes = await Note.find({ status: "visible" }, { changes: 0 });
+      const notes = await Note.find(
+        { user_id: userId, status: "visible" },
+        { changes: 0 }
+      );
       res
         .status(200)
         .json({ status: 200, message: "Notes retrieved successfully", notes });
@@ -31,8 +35,13 @@ class NoteController {
    */
   static async getNoteById(req, res) {
     const { id } = req.params;
+    const userId = req.auth._id;
+
     try {
-      const note = await Note.findById(id, { changes: 0 });
+      const note = await Note.findOne(
+        { _id: id, user_id: userId },
+        { changes: 0 }
+      );
       if (!note || note.status === "hidden") {
         return res.status(404).json({ message: "Note not found" });
       }
@@ -55,6 +64,7 @@ class NoteController {
    */
   static async searchNotes(req, res) {
     const { query } = req.query;
+    const userId = req.auth._id;
 
     if (!query || typeof query !== "string") {
       return res
@@ -69,6 +79,7 @@ class NoteController {
             { title: { $regex: query, $options: "i" } },
             { description: { $regex: query, $options: "i" } },
           ],
+          user_id: userId,
         },
         { changes: 0 }
       );
@@ -95,8 +106,13 @@ class NoteController {
    */
   static async getNoteHistory(req, res) {
     const { id } = req.params;
+    const userId = req.auth._id;
+
     try {
-      const note = await Note.findById(id, { changes: 1 });
+      const note = await Note.findOne(
+        { _id: id, user_id: userId },
+        { changes: 1 }
+      );
       if (!note || note.status === "hidden") {
         return res.status(404).json({ message: "Note not found" });
       }
@@ -126,11 +142,12 @@ class NoteController {
     }
 
     const { title, description, user_id } = req.body;
+    const userId = req.auth._id;
     try {
       const newNote = new Note({
         title,
         description,
-        user_id,
+        user_id: userId,
         changes: {
           title,
           description,
@@ -185,37 +202,40 @@ class NoteController {
    */
   static async updateNote(req, res) {
     const { id } = req.params;
+    const userId = req.auth._id;
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-      const updatedNote = await Note.findByIdAndUpdate(id, req.body, {
-        new: true,
-        runValidators: true,
-      });
-
-      if (!updatedNote) {
+      const note = await Note.findOne({ _id: id, user_id: userId });
+      if (!note) {
         return res.status(404).json({ message: "Note not found" });
       }
 
-      if (updatedNote.status === "hidden") {
-        return res
-          .status(404)
-          .json({
-            message:
-              "Note already deleted, sorry you cannot edit a deleted note",
-          });
+      if (note.status === "hidden") {
+        return res.status(404).json({
+          message: "Note already deleted, sorry you cannot edit a deleted note",
+        });
       }
 
-      updatedNote.changes.push({ ...req.body, date: new Date() });
-      await updatedNote.save();
+      note.changes.push({
+        title: note.title,
+        description: note.description,
+        date: new Date(),
+      });
+
+      note.title = req.body.title;
+      note.description = req.body.description;
+
+      await note.save();
 
       res.status(200).json({
         status: 200,
         message: "Note updated successfully",
-        note: updatedNote,
+        note: note,
       });
     } catch (error) {
       res
@@ -233,8 +253,11 @@ class NoteController {
    */
   static async deleteNote(req, res) {
     const { id } = req.params;
+    const userId = req.auth._id;
+
     try {
-      const note = await Note.findById(id);
+      const note = await Note.findOne({ _id: id, user_id: userId });
+      console.log(note);
       if (!note) {
         return res.status(404).json({ message: "Note not found" });
       } else if (note.status === "hidden") {
@@ -250,7 +273,9 @@ class NoteController {
         note,
       });
     } catch (error) {
-      res.status(500).json({ message: "Error deleting note", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Error deleting note", error: error.message });
     }
   }
 }
