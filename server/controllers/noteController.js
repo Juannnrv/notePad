@@ -16,13 +16,16 @@ class NoteController {
         { user_id: userId, status: "visible" },
         { changes: 0 }
       );
-      res
-        .status(200)
-        .json({ status: 200, message: "Notes retrieved successfully", notes });
+      res.status(200).json({
+        status: 200,
+        message: "Notes retrieved successfully",
+        data: notes,
+      });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error retrieving notes", error: error.message });
+      res.status(500).json({
+        status: 500,
+        message: "Error retrieving notes",
+      });
     }
   }
 
@@ -43,15 +46,21 @@ class NoteController {
         { changes: 0 }
       );
       if (!note || note.status === "hidden") {
-        return res.status(404).json({ message: "Note not found" });
+        return res.status(404).json({
+          status: 404,
+          message: "Note not found",
+        });
       }
-      res
-        .status(200)
-        .json({ status: 200, message: "Note retrieved successfully", note });
+      res.status(200).json({
+        status: 200,
+        message: "Note retrieved successfully",
+        data: note,
+      });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error retrieving note", error: error.message });
+      res.status(500).json({
+        status: 500,
+        message: "Error retrieving note",
+      });
     }
   }
 
@@ -67,9 +76,10 @@ class NoteController {
     const userId = req.auth._id;
 
     if (!query || typeof query !== "string") {
-      return res
-        .status(400)
-        .json({ message: "Query parameter is required and must be a string" });
+      return res.status(400).json({
+        status: 400,
+        message: "Query parameter is required and must be a string",
+      });
     }
 
     try {
@@ -85,16 +95,22 @@ class NoteController {
       );
 
       if (notes.length === 0 || notes[0].status === "hidden") {
-        return res.status(404).json({ message: "No notes found" });
+        return res.status(404).json({
+          status: 404,
+          message: "No notes found",
+        });
       }
 
-      res
-        .status(200)
-        .json({ status: 200, message: "Notes found successfully", notes });
+      res.status(200).json({
+        status: 200,
+        message: "Notes found successfully",
+        data: notes,
+      });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error searching notes", error: error.message });
+      res.status(500).json({
+        status: 500,
+        message: "Error searching notes",
+      });
     }
   }
 
@@ -114,17 +130,20 @@ class NoteController {
         { changes: 1 }
       );
       if (!note || note.status === "hidden") {
-        return res.status(404).json({ message: "Note not found" });
+        return res.status(404).json({
+          status: 404,
+          message: "Note not found",
+        });
       }
       res.status(200).json({
         status: 200,
         message: "Note history retrieved successfully",
-        changes: note.changes,
+        data: note.changes,
       });
     } catch (error) {
       res.status(500).json({
+        status: 500,
         message: "Error retrieving note history",
-        error: error.message,
       });
     }
   }
@@ -138,10 +157,14 @@ class NoteController {
   static async createNote(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        status: 400,
+        message: "Validation errors",
+        data: errors.array(),
+      });
     }
 
-    const { title, description, user_id } = req.body;
+    const { title, description } = req.body;
     const userId = req.auth._id;
     try {
       const newNote = new Note({
@@ -158,26 +181,41 @@ class NoteController {
       res.status(201).json({
         status: 201,
         message: "Note created successfully",
-        note: newNote,
+        data: newNote,
       });
     } catch (error) {
-      res.status(500).json({ message: "Error creating note", error });
+      res.status(500).json({
+        status: 500,
+        message: "Error creating note",
+      });
     }
   }
 
-  // Método para crear un cambio en el historial de una nota
+  /**
+   * Creates a change in the history of a note.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the note history is created.
+   */
   static async createNoteHistory(req, res) {
     const { id } = req.params;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        status: 400,
+        message: "Validation errors",
+        data: errors.array(),
+      });
     }
 
     const { title, description } = req.body;
     try {
       const note = await Note.findById(id);
       if (!note) {
-        return res.status(404).json({ message: "Note not found" });
+        return res.status(404).json({
+          status: 404,
+          message: "Note not found",
+        });
       }
 
       note.changes.push({ title, description, date: new Date() });
@@ -185,10 +223,13 @@ class NoteController {
       res.status(200).json({
         status: 200,
         message: "Note history created successfully",
-        note: note,
+        data: note,
       });
     } catch (error) {
-      res.status(500).json({ message: "Error creating note history", error });
+      res.status(500).json({
+        status: 500,
+        message: "Error creating note history",
+      });
     }
   }
 
@@ -206,17 +247,25 @@ class NoteController {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        status: 400,
+        message: "Validation errors",
+        data: errors.array(),
+      });
     }
 
     try {
       const note = await Note.findOne({ _id: id, user_id: userId });
       if (!note) {
-        return res.status(404).json({ message: "Note not found" });
+        return res.status(404).json({
+          status: 404,
+          message: "Note not found",
+        });
       }
 
       if (note.status === "hidden") {
         return res.status(404).json({
+          status: 404,
           message: "Note already deleted, sorry you cannot edit a deleted note",
         });
       }
@@ -235,12 +284,13 @@ class NoteController {
       res.status(200).json({
         status: 200,
         message: "Note updated successfully",
-        note: note,
+        data: note,
       });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error updating note", error: error.message });
+      res.status(500).json({
+        status: 500,
+        message: "Error updating note",
+      });
     }
   }
 
@@ -257,11 +307,16 @@ class NoteController {
 
     try {
       const note = await Note.findOne({ _id: id, user_id: userId });
-      console.log(note);
       if (!note) {
-        return res.status(404).json({ message: "Note not found" });
+        return res.status(404).json({
+          status: 404,
+          message: "Note not found",
+        });
       } else if (note.status === "hidden") {
-        return res.status(404).json({ message: "Note already deleted" });
+        return res.status(404).json({
+          status: 404,
+          message: "Note already deleted",
+        });
       }
 
       note.status = "hidden";
@@ -270,12 +325,13 @@ class NoteController {
       res.status(200).json({
         status: 200,
         message: "Note deleted successfully",
-        note,
+        data: note,
       });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error deleting note", error: error.message });
+      res.status(500).json({
+        status: 500,
+        message: "Error deleting note",
+      });
     }
   }
 }
