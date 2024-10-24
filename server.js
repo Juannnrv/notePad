@@ -4,6 +4,7 @@ const https = require("https");
 const fs = require("fs");
 const { errorHandler } = require('./server/middleware/errorHandler');
 const db = require("./server/helpers/db");
+const { authJwt, handleAuthErrors } = require('./server/middleware/authJwt'); 
 const app = express();
 const userRouter = require("./server/routes/userRouter");
 const noteRouter = require("./server/routes/noteRouter");
@@ -23,9 +24,10 @@ db.getInstace();
 const privateKey = fs.readFileSync("./private.key");
 const certificate = fs.readFileSync("./certificate.crt");
 
-app.use("/notes", noteRouter);
-// app.use("/users", userRouter);
+app.use("/users", userRouter);
+app.use("/notes", authJwt, noteRouter);
 
+app.use(handleAuthErrors);
 app.use(errorHandler);
 
 // Crear servidor HTTPS

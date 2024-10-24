@@ -12,20 +12,20 @@ class UserController {
     static async createAccount(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ status: 400, errors: errors.array() });
         }
 
         const { username, password, email } = req.body;
         try {
             const user = await User.create({ username, password, email });
-            res.status(201).json({ message: 'User account created successfully', user });
+            res.status(201).json({ status: 201, message: 'User account created successfully', user });
         } catch (error) {
-            res.status(500).json({ message: 'Error creating user account', error: error.message });
+            res.status(500).json({ status: 500, message: 'Error creating user account', error: error.message });
         }
     }
 
     /**
-     * Logs in a user generatin a authetication token.
+     * Logs in a user generating a authetication token.
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      * @returns {Promise<void>} - A promise that resolves when the user is logged in.
@@ -33,21 +33,21 @@ class UserController {
     static async logIn(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ status: 400, errors: errors.array() });
         }
 
         const { email, password } = req.body;
         try {
             const user = await User.findOne({ email, password });
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(404).json({ status: 404, message: 'Invalid email or password, please check and try again' });
             }
 
-            const token = tokenJwt.generateToken({ userId: user._id, username: user.username, role: user.role });
+            const token = tokenJwt.generateToken({ userId: user._id, username: user.username, password: user.password });
 
-            res.status(200).json({ message: 'User logged in successfully', token });
+            res.status(200).json({ status: 200, message: 'User logged in successfully', token });
         } catch (error) {
-            res.status(500).json({ message: 'Error logging in user', error: error.message });
+            res.status(500).json({ status: 500, message: 'Error logging in user', error: error.message });
         }
     }
 
@@ -60,7 +60,7 @@ class UserController {
     static async updateUser(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ status: 400, errors: errors.array() });
         }
 
         const { id } = req.params;
@@ -68,11 +68,11 @@ class UserController {
         try {
             const user = await User.findByIdAndUpdate(id, { username, password, email }, { new: true });
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(404).json({ status: 404, message: 'User not found' });
             }
-            res.status(200).json({ message: 'User account updated successfully', user });
+            res.status(200).json({ status: 200, message: 'User account updated successfully', user });
         } catch (error) {
-            res.status(500).json({ message: 'Error updating user account', error: error.message });
+            res.status(500).json({ status: 500, message: 'Error updating user account', error: error.message });
         }
     }
 
@@ -87,11 +87,11 @@ class UserController {
         try {
             const user = await User.findByIdAndDelete(id);
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(404).json({ status: 404, message: 'User not found' });
             }
-            res.status(200).json({ message: 'User account deleted successfully', user });
+            res.status(200).json({ status: 200, message: 'User account deleted successfully', user });
         } catch (error) {
-            res.status(500).json({ message: 'Error deleting user account', error: error.message });
+            res.status(500).json({ status: 500, message: 'Error deleting user account', error: error.message });
         }
     }
 }
