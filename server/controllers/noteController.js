@@ -1,4 +1,3 @@
-// controllers/NoteController.js
 const Note = require("../models/noteModel");
 const { validationResult } = require("express-validator");
 
@@ -10,8 +9,10 @@ class NoteController {
    * @returns {Promise<void>} - A promise that resolves when the notes are retrieved.
    */
   static async getNotes(req, res) {
-    const userId = req.auth._id;
     try {
+      const userId = req.user._id
+      console.log(req.user)
+
       const notes = await Note.find(
         { user_id: userId, status: "visible" },
         { changes: 0 }
@@ -28,7 +29,6 @@ class NoteController {
       });
     }
   }
-
   /**
    * Retrieves a note by its ID.
    * @param {Object} req - The request object.
@@ -38,7 +38,7 @@ class NoteController {
    */
   static async getNoteById(req, res) {
     const { id } = req.params;
-    const userId = req.auth._id;
+    const userId = req.user._id
 
     try {
       const note = await Note.findOne(
@@ -73,7 +73,7 @@ class NoteController {
    */
   static async searchNotes(req, res) {
     const { query } = req.query;
-    const userId = req.auth._id;
+    const userId = req.user._id
 
     if (!query || typeof query !== "string") {
       return res.status(400).json({
@@ -122,7 +122,7 @@ class NoteController {
    */
   static async getNoteHistory(req, res) {
     const { id } = req.params;
-    const userId = req.auth._id;
+    const userId = req.user._id
 
     try {
       const note = await Note.findOne(
@@ -165,7 +165,7 @@ class NoteController {
     }
 
     const { title, description } = req.body;
-    const userId = req.auth._id;
+    const userId = req.user._id
     try {
       const newNote = new Note({
         title,
@@ -243,7 +243,7 @@ class NoteController {
    */
   static async updateNote(req, res) {
     const { id } = req.params;
-    const userId = req.auth._id;
+    const userId = req.user._id
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -271,8 +271,8 @@ class NoteController {
       }
 
       note.changes.push({
-        title: note.title,
-        description: note.description,
+        title: req.body.title,
+        description: req.body.description,
         date: new Date(),
       });
 
@@ -303,7 +303,7 @@ class NoteController {
    */
   static async deleteNote(req, res) {
     const { id } = req.params;
-    const userId = req.auth._id;
+    const userId = req.user._id
 
     try {
       const note = await Note.findOne({ _id: id, user_id: userId });

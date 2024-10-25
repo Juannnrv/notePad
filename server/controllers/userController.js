@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const { validationResult } = require("express-validator");
-const tokenJwt = require("../middleware/tokenJwt");
+const JwtService = require("../middleware/jwtService");
+const bcrypt = require("bcrypt");
 
 class UserController {
   /**
@@ -20,8 +21,15 @@ class UserController {
     }
 
     const { username, password, email } = req.body;
+
     try {
-      const user = await User.create({ username, password, email });
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const user = await User.create({
+        username,
+        password: hashedPassword,
+        email,
+      });
       res.status(201).json({
         status: 201,
         message: "User account created successfully",
@@ -52,8 +60,10 @@ class UserController {
     }
 
     const { email, password } = req.body;
+
     try {
-      const user = await User.findOne({ email, password });
+      const user = await User.findOne({ email });
+
       if (!user) {
         return res.status(404).json({
           status: 404,
@@ -61,7 +71,17 @@ class UserController {
         });
       }
 
-      const token = tokenJwt.generateToken({ _id: user._id });
+      const comparePassword = await bcrypt.compare(password, user.password);
+      if (!comparePassword) {
+        return res.status(404).json({
+          status: 404,
+          message: "Invalid password, please check and try again",
+        });
+      }
+
+      const token = JwtService.generateToken({ _id: user._id });
+
+      req.session.authToken = token;
 
       res.status(200).json({
         status: 200,
@@ -72,6 +92,7 @@ class UserController {
       res.status(500).json({
         status: 500,
         message: "Error logging in user",
+        error: error.message,
       });
     }
   }

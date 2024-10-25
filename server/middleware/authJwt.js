@@ -1,21 +1,19 @@
-const { expressjwt: expressJwt } = require('express-jwt');
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const secret = fs.readFileSync("certificate.csr", "utf8");
 
-const authJwt = expressJwt({
-  secret: process.env.JWT_SECRET,
-  algorithms: ['HS256']
-}).unless({
-  path: [
-    '/users/create',
-    '/users/login'
-  ]
-});
-
-const handleAuthErrors = (err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).json({ message: 'Invalid or missing token. Please provide a valid token or sign up.' });
-  } else {
-    next(err);
+const verifyJwt = (req, res, next) => {
+  const token = req.session.authToken;
+  if (!token) {
+    return res.status(401).json({ status: 401, message: 'Session expired.' });
+  }
+  try {
+    const decoded = jwt.verify(token, secret);
+    req.user = decoded; 
+    next();
+  } catch (error) {
+    return res.status(401).json({ status: 401, message: 'Invalid token.' });
   }
 };
 
-module.exports = { authJwt, handleAuthErrors };
+module.exports = verifyJwt;
