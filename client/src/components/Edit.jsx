@@ -37,7 +37,7 @@ export default function EditNoteEditor() {
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 429) {
           navigate('/');
           return;
         }

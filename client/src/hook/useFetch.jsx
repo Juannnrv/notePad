@@ -21,7 +21,7 @@ const useFetch = (endpoint) => {
         });
 
         if (!response.ok) {
-          if (response.status === 401) {
+          if (response.status === 401 || response.status === 429) {
             navigate('/');
             return;
           }
