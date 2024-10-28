@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const useFetchNotes = () => {
+const useFetch = (endpoint) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -9,10 +9,13 @@ const useFetchNotes = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await fetch('https://localhost:5000/notes', {
+        const response = await fetch(`https://localhost:5000${endpoint}`, {
           headers: {
-            "x-version": "1.0.0",
+            'Content-Type': 'application/json',
+            'x-version': '1.0.0',
           },
           credentials: 'include',
         });
@@ -32,7 +35,6 @@ const useFetchNotes = () => {
         }
 
         const result = await response.json();
-        console.log(result.data);
         setData(result.data);
       } catch (error) {
         setError(error);
@@ -42,9 +44,9 @@ const useFetchNotes = () => {
     };
 
     fetchData();
-  }, [navigate]);
+  }, [endpoint]);
 
   return { data, loading, error };
 };
 
-export default useFetchNotes;
+export default useFetch;
