@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import InputField from './InputField';
@@ -14,6 +15,7 @@ const LogIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { authenticate, loading, error } = useAuth();
   const [validationErrors, setValidationErrors] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (error && error.data) {
@@ -29,11 +31,16 @@ const LogIn = () => {
     const data = isLogin ? { email, password } : { username: name, email, password };
     try {
       const result = await authenticate(url, data);
-      setUser(result);
+      if (isLogin) {
+        navigate('/home'); // Redirect to Home component after successful login
+      } else {
+        setIsLogin(true); // Switch to login form after successful account creation
+      }
     } catch (error) {
       console.error('Authentication error:', error);
     }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-color-13 p-4">
       <motion.div
