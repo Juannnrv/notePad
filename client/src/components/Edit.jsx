@@ -8,7 +8,7 @@ import useFetch from '../hook/useFetch';
 
 export default function EditNoteEditor() {
   const { id } = useParams();
-  const { data, loading, error } = useFetch(`/notes/${id}`);
+  const { data, loading, error } = useFetch(`/${id}`);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [errorState, setErrorState] = useState(null);

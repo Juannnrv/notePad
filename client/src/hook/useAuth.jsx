@@ -19,8 +19,17 @@ const useAuth = () => {
       });
 
       if (!response.ok) {
+        if (response.status === 401 || response.status === 429) {
+          navigate('/');
+          return;
+        }
+
         const errorData = await response.json();
-        throw errorData; 
+        if (errorData.message === 'Validation errors') {
+          setError(errorData.data.map(err => err.msg).join(', '));
+          return;
+        }
+        throw new Error(errorData.message || 'Something went wrong');
       }
 
       const result = await response.json();
