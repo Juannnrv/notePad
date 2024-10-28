@@ -11,7 +11,6 @@ class NoteController {
   static async getNotes(req, res) {
     try {
       const userId = req.user._id
-      console.log(req.user)
 
       const notes = await Note.find(
         { user_id: userId, status: "visible" },

@@ -4,9 +4,15 @@ import search from "../assets/img/search.png";
 import info from "../assets/img/info_outline.png";
 import add from "../assets/img/add.png";
 import rafiki from "../assets/img/rafiki.png";
+import { useNavigate } from 'react-router-dom';
 
 const NotesList = () => {
   const { data, loading, error } = useFetch("/notes", {});
+  const navigate = useNavigate();
+
+  const handleAddClick = () => {
+    navigate('/save');
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -33,7 +39,7 @@ const NotesList = () => {
           <img src={rafiki} alt="Rafiki" className="w-[350px] h-[287px] object-contain mb-4" />
           <p className="text-white text-xl font-light">Create your first note!</p>
         </div>
-        <div className="fixed bg-color-13 rounded-full p-2 z-10 right-9 bottom-9">
+        <div className="fixed bg-color-13 rounded-full p-2 z-10 right-9 bottom-9 cursor-pointer" onClick={handleAddClick}>
           <img src={add} alt="Add" className="w-6 h-6 object-contain" />
         </div>
       </div>
@@ -64,7 +70,7 @@ const NotesList = () => {
           </li>
         ))}
       </ul>
-      <div className="fixed bg-color-13 rounded-full p-2 z-10 right-9 bottom-9">
+      <div className="fixed bg-color-13 rounded-full p-2 z-10 right-9 bottom-9 cursor-pointer" onClick={handleAddClick}>
         <img src={add} alt="Add" className="w-6 h-6 object-contain" />
       </div>
     </div>

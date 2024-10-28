@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const useFetchNotes = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,8 +18,17 @@ const useFetchNotes = () => {
         });
 
         if (!response.ok) {
+          if (response.status === 401) {
+            navigate('/');
+            return;
+          }
+  
           const errorData = await response.json();
-          throw errorData; 
+          if (errorData.message === 'Validation errors') {
+            setError(errorData.data.map(err => err.msg).join(', '));
+            return;
+          }
+          throw new Error(errorData.message || 'Something went wrong');
         }
 
         const result = await response.json();
@@ -31,7 +42,7 @@ const useFetchNotes = () => {
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   return { data, loading, error };
 };

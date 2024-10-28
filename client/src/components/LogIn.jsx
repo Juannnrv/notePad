@@ -32,9 +32,9 @@ const LogIn = () => {
     try {
       const result = await authenticate(url, data);
       if (isLogin) {
-        navigate('/home'); // Redirect to Home component after successful login
+        navigate('/home'); 
       } else {
-        setIsLogin(true); // Switch to login form after successful account creation
+        setIsLogin(true); 
       }
     } catch (error) {
       console.error('Authentication error:', error);
