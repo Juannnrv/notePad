@@ -1,251 +1,847 @@
+# Note Pad 
 
-# NotePadApp
+The **Notes Application** is a platform designed to facilitate the management of users' personal notes. Its main objective is to provide a simple and accessible environment where users can efficiently create, edit, view and delete their notes. The application has features such as note search, user authentication and a history of changes, allowing users to organize their thoughts and keep a record of their ideas in a secure and private way.debounce functions.
 
-La **Aplicación de Notas** es una plataforma diseñada para facilitar la gestión de notas personales de los usuarios. Su principal objetivo es proporcionar un entorno sencillo y accesible donde los usuarios puedan crear, editar, visualizar y eliminar sus notas de manera eficiente. La aplicación cuenta con funcionalidades como la búsqueda de notas, autenticación de usuario y un historial de cambios, lo que permite a los usuarios organizar sus pensamientos y mantener un registro de sus ideas de forma segura y privada.
-
-La aplicación está desarrollada con una arquitectura que incluye tanto un frontend intuitivo como un backend sencillo, asegurando una experiencia de usuario fluida. Además, el uso de un token JWT para la autenticación garantiza que solo los usuarios autorizados puedan acceder a sus notas, protegiendo así la privacidad y seguridad de la información.
-
+The application is developed with an MVC architecture that includes both an intuitive frontend and a robust backend, ensuring a seamless user experience. In addition, the use of a JWT token for authentication ensures that only authorized users can access their notes, thus protecting the privacy and security of information.
 
 
-## Problemática
 
-En un mundo cada vez más digitalizado, muchas personas enfrentan dificultades para organizar sus pensamientos y tareas diarias. Las aplicaciones de notas tradicionales a menudo carecen de características esenciales, como la capacidad de buscar rápidamente notas o llevar un registro de cambios. Esto puede llevar a la frustración y a la pérdida de información valiosa.
+To install and configure this project, follow these steps:
 
-Algunos problemas específicos que la **Aplicación de Notas** busca resolver son:
 
-1. **Falta de Organización**: Sin una herramienta adecuada, los usuarios pueden tener dificultades para mantener sus notas organizadas y accesibles. La aplicación permite categorizar y buscar notas fácilmente.
 
-2. **Seguridad de la Información**: La falta de autenticación en muchas aplicaciones de notas puede poner en riesgo la privacidad de los usuarios. La implementación de un sistema de autenticación protege las notas de accesos no autorizados.
+### **Prerequisites**:
 
-3. **Dificultad para Rastrear Cambios**: Muchas veces, los usuarios necesitan recordar versiones anteriores de sus notas o cambios realizados. La función de historial de cambios permite a los usuarios ver y restaurar versiones anteriores de sus notas si es necesario.
+- **Node.js**: Make sure you have Node.js version `18.x` installed.
+- **NPM**: Comes installed with Node.js, but make sure you have a recent version.
 
-4. **Accesibilidad**: La aplicación ofrece una interfaz intuitiva que facilita su uso tanto para usuarios técnicos como para aquellos con menos experiencia, promoviendo una adopción más amplia.
 
-   
 
-## Funcionalidades Principales
+### Installing dependencies
 
-- **Crear Nota:** Permitir al usuario agregar una nueva nota con un título y un contenido.
+- Clone the project repository and navigate to the project directory.
 
-- **Editar Nota:** Permitir modificar el título y el contenido de una nota existente.
-
-- **Eliminar Nota:** Eliminar una nota específica de la lista.
-
-- **Ver Notas:** Mostrar una lista de todas las notas existentes con la posibilidad de ver los detalles de cada una.
-
-- **Buscador:** Implementar una barra de búsqueda para que el usuario pueda buscar notas por el título o el contenido. A medida que el usuario escribe en el campo de búsqueda, se filtrarán las notas para mostrar solo aquellas que coincidan con los términos de búsqueda.
+  ```bash
+  git clone https://github.com/Juannnrv/notePad
+  
+  cd notePad
+  ```
 
   
 
-## Funcionalidades Adicionales
+- Run the following command to install the production and development dependencies:
 
-- **Búsqueda y Filtrado:** Implementar una barra de búsqueda para encontrar notas por título o contenido, y filtros por etiqueta o categoría.
-
-- **Autenticación de Usuario:** Agregar una capa de autenticación para que los usuarios puedan crear una cuenta e iniciar sesión, de modo que sus notas sean privadas. Esto se implementará mediante una API que creará el usuario y proporcionará un token JWT para identificar al dueño de las notas en las APIs.
-
-- **Historial de Cambios:** Mantener un registro de las ediciones, eliminaciones y creaciones para realizar un seguimiento de las actividades del usuario, las cuales se almacenarán en la base de datos. Este historial será visible únicamente para el administrador.
-
-  
-
-## Tecnologías Recomendadas
-
-1. **Front-end**: 
-
-   - **Figma**: https://www.figma.com/community/file/1014161465589596715
-   - **Recurso:** https://drive.google.com/drive/folders/1klvUArDXJAT46JaSO76IJyBXKsRXhsxy?usp=sharing
-   - **Opción 1 (Opcional) :** React o Vue.js para construir una interfaz de usuario interactiva y dinámica.
-   - **Opción 2:** Desarrollo puro utilizando HTML, CSS y JavaScript para una implementación más sencilla.
-
-2. **Backend**:
-
-   - **Node.js** con Express para la creación de los endpoints.
-   - **Java** con Spring Boot  para la creación de los endpoints. 
-3. **Arquitectura del Proyecto**: Se pueden elegir entre dos opciones:
-
-     - **MVC (Modelo-Vista-Controlador)**: Para separar la lógica de negocio de la interfaz de usuario.
-     - **Arquitectura Hexagonal**: Para crear una aplicación que sea más fácil de probar y mantener, separando los componentes en diferentes capas.
-
-4. **Base de Datos**:
-   - **MongoDB**: Para un almacenamiento flexible de actividades y sus atributos.
-   - **PostgreSQL** o **MySQL**: Si prefieres una base de datos relacional.
-
-5. **Autenticación**:
-   - **JWT (JSON Web Tokens):** para gestionar sesiones y autenticación de usuarios.
-   - **Autenticación Segura (Opcional)**: Implementar autenticación con OAuth2.
-
-6. **GitHub**: Para la gestión de versiones del código en el desarrollo, usando **conventional commits.**
+  ```bash
+  npm install 
+  ```
 
 
 
-# Diseño de base de datos
+### Dependencies versions
 
-## Diagrama ER
+- **Production dependencies**:
+  - `bcrypt@5.1.1` - To encrypt passwords.
+  - `concurrently@9.0.1` - Execute multiple commands simultaneously.
+  - `cors@2.8.5` - Middleware to enable CORS.
+  - `express-jwt@8.4.1` - Middleware for authentication with JWT.
+  - `express-rate-limit@7.4.1` - Middleware to limit the number of requests.
+  - `express-session@1.18.1` - Session handling in Express.
+  - `express-validator@7.2.0` - Data validation in Express.
+  - `framer-motion@11.11.10` - Animations for the interface.
+  - `https@1.0.0` - HTTPS protocol.
+  - `jsonwebtoken@9.0.2` - JWT token generation.
+  - `mongoose@8.7.2` - ORM for MongoDB.
+  - `react@18.3.1` and `react-dom@18.3.1` - Library for building interfaces.
+  - `react-icons@5.3.0` - Icons for React.
+  - `react-router-dom@6.27.0` - Routing in React applications.
+  - `semver@7.6.3` - Semantic version validation and manipulation.
+- **Development Dependencies**:
+  - `@eslint/js@9.11.1`, `eslint@9.11.1`, `eslint-plugin-react@7.37.0`, `eslint-plugin-react@7.37.0`, `eslint-plugin-react-hooks@5.1.0-rc.0`, `eslint-plugin-react-refresh@0.4.12` - Tools for linting.
+  - `@types/react@18.3.10`, `@types/react-dom@18.3.0` - Types for React.
+  - `@vitejs/plugin-react@4.3.2`, `vite@5.4.8` - Configuration for frontend development.
+  - `autoprefixer@10.4.20`, `postcss@8.4.47`, `tailwindcss@3.4.14` - Configuration for CSS styles.
+
+
+
+### Set enviroment variables:
+
+Create an `.env` file in the root of the project and add the necessary environment variables (follow .envTemplate file).
 
 ```bash
-+------------------+             +------------------+
-|      Usuario     |             |       Nota       |
-|------------------|             |------------------|
-|                  |             |                  |
-+------------------+             +------------------+
-          |                                |
-          |                                |
-          |                                |
-          | 1                            N |
-          |                                |
-          |                                |
-+------------------+                       |
-|     Historial    |-----------------------+
-|------------------|
-|                  |
-+------------------+
-```
+  MONGO_PROTOCOLO=mongodb://
+  MONGO_USER=juan
+  MONGO_PSW=juan123
+  MONGO_HOST=172.16.102
+  MONGO_PORT=27017
+  MONGO_DB_NAME=notas
+  ```
+
+### **Start the project**:
+
+- In development, you can use the following command to start the frontend and backend concurrently:
+
+  ```bash
+  npm run dev
+  ```
+
+  
+
+This will start Vite for the frontend and the backend server (`server.js`) with environment variables defined in `.env`.
 
 
 
-# API de Notas
-
-## Endpoints que deben desarrollarse
-
-| **Funcionalidad**                    | **Método HTTP** | **Endpoint**              | **Descripción**                                              |
-| ------------------------------------ | --------------- | ------------------------- | ------------------------------------------------------------ |
-| Crear Usuario                        | POST            | `/users`              | Crea un nuevo usuario y devuelve un token JWT.               |
-| Iniciar Sesión                       | POST            | `/users/login`        | Permite a un usuario iniciar sesión y obtener un token JWT.  |
-| **Cerrar Sesión (opcional)** | POST            | `/users/logout`       | Permite a un usuario cerrar sesión.                          |
-| Crear Nota                           | POST            | `/notes`              | Crea una nueva nota.                                         |
-| Obtener Todas las Notas              | GET             | `/notes`              | Obtiene una lista de todas las notas.                        |
-| Obtener Nota Específica              | GET             | `/notes/{id}`         | Obtiene los detalles de una nota específica.                 |
-| Actualizar Nota                      | PUT             | `/notes/{id}`         | Actualiza una nota existente.                                |
-| Eliminar Nota                        | DELETE          | `/notes/{id}`         | Elimina una nota específica.                                 |
-| Buscar Notas                         | GET             | `/notes/search`       | Busca notas por título o contenido.                          |
-| Obtener Historial de Cambios de Nota | GET             | `/notes/{id}/history` | Obtiene el historial de cambios de una nota específica. **(solo admin)** |
-| **Crear Nueva Versión de Nota**      | POST            | `/notes/{id}/history` | Guarda una nueva versión de una nota. **(Sin interfaz gráfica)** |
-| **Actualizar Usuario (opcional)**     | PUT             | `/users/{id}`         | Actualiza la información del usuario específico **(solo admin).** |
-| **Eliminar Usuario (opcional)**                 | DELETE          | `/users/{id}`         | Elimina un usuario específico **(solo admin).**              |
-
-**Nota:** Para eliminar o actualizar la información de un usuario, esta acción se realizará únicamente desde la base de datos. No es necesario crear un API desde el **backend**, aunque si se desea implementar uno, es opcional.
+## User API Documentation
 
 
 
-## Estructura de la API (Especificaciones Técnicas)
+### Create Account
 
-1. **Acceso a la API:**
+**Method**: `POST`
+**URL**: `https://localhost:3000/users/create`
+**Auth required**: `False`
 
-   - Es necesario estar logueado.
-   - Cada router debe validar la sesión activa con el formato **JWT**.
-   - Las sesiones tienen un tiempo máximo de expiración de 30 minutos.
-   - Mensaje al caducar: "sesión expirada" (con el Formato de Respuesta).
+**Limit requests**: 45 every 15 minutes
 
-2. **Tasas de solicitudes por tipo de método:**
-
-   - Métodos POST - **login**:
-     - Máximo de 3 solicitudes.
-     - Se refrescan después de 3 minutos.
-   - Métodos GET:
-     - Máximo de 25 solicitudes.
-     - Se refrescan después de 15 minutos.
-   - Métodos POST:
-     - Máximo de 45 solicitudes.
-     - Se refrescan después de 15 minutos.
-   - Métodos DELETE:
-     - Máximo de 10 solicitudes.
-     - Se refrescan después de 10 minutos.
-   - Métodos PUT:
-     - Máximo de 45 solicitudes.
-     - Se refrescan después de 15 minutos.
-
-3. **Mensajes al alcanzar la tasa máxima:**
-
-   - Mensaje para **login**  "Espera 3 minutos antes de volver a intentarlo." (con el Formato de Respuesta).
-
-   - Mensaje de "tasa superada" (con el Formato de Respuesta).
-
-
-
-## Formato de Respuesta
-
-Todas las respuestas seguirán un formato estándar:
-
-```json
-{
-    "status": "status code", // https://http.cat/
-    "message": "Mensaje opcional",
-    "data": { /* Datos solicitados */ } // Si se obtienen más de un dato, la representación será de la forma [{...}], mientras que si es solo uno, será de la forma {}.
-    
-}
-```
-
-En caso de error:
-
-```json
-{
-    "status":"status code", // https://http.cat/
-    "message": "Descripción del error"
-}
-```
-
-
-
-## Formato de documentación
-
-**Nota:** El repositorio debe contener un archivo **README.md** que incluya la documentación detallada de cada API, junto con las instrucciones para instalar las dependencias del proyecto. Además, es necesario especificar la versión de **NodeJS** utilizada. Si el proyecto está desarrollado con **Spring Boot** en Java, se debe indicar que requiere al menos **JDK 17**, así como listar las dependencias utilizadas con sus versiones.
-
-
-
-### Ejemplo de la documentación de las API.
-
-# Crear usuario
-
-**Method** : `GET, POST, PUT, DELETE`
-
-**URL** : `http://localhost:3000/users/login`
-
-**Auth required** : `True`
-
-**header**: 
+**Headers**:
 
 ```json
 {
     "Content-Type": "application/json",
-    "Authorization": "Bearer ...."
+    "x-version": "1.0.0"
 }
 ```
 
-**params** : `/Miguel/Castro/15` 
-
-**URL query** : `?nombre="Miguel"&apellido="Castro"&edad=15 `
-
-**body** : 
+**Body**:
 
 ```json
 {
-    "nombre": "Miguel",
-    "apellido": "Castro",
-    "edad": 15
+    "username": "string",
+    "password": "string, minimum 6 characters",
+    "email": "valid email"
 }
 ```
 
-**Success Responses**
+**Success Response**:
 
-**Code** : `200 OK, 201 Created ...  `
+- **Code**: `201 Created`
 
 ```json
 {
-    "status": "status code", // https://http.cat/
-    "message": "Mensaje opcional",
-    "data": { /* Datos solicitados */ } // Si se obtienen más de un dato, la representación será de la forma [{...}], mientras que si es solo uno, será de la forma {}.
-    
+    "status": 201,
+    "message": "User account created successfully",
+    "data": {
+        "username": "sampleUsername",
+        "email": "sampleEmail"
+    }
 }
 ```
+
+**Error Responses**
+
+**Code** : `400 Bad Request`
+
+```json
+{
+    "status": 400,
+    "message": "Validation errors",
+    "data": [
+        {
+            "msg": "Username is required",
+            "param": "username",
+            "location": "body"
+        }
+    ]
+}
+```
+
+**Code** : `500 Internal Server Error`
+
+```json
+{
+    "status": 500,
+    "message": "Error creating user account"
+}
+```
+
+
+
+### Log In Account
+
+**Method**: `POST`
+**URL**: `https://localhost:3000/users/login`
+**Auth required**: `False`
+
+**Limit requests**: 3 every 3 minutes
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Body**:
+
+```json
+{
+    "email": "example@example.com",
+    "password": "examplePass123"
+}
+```
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "User logged in successfully",
+      "data": {
+          "token": "JWT_token_here"
+      }
+  }
+  ```
+
+**Error Responses**
+
+**Code** : `400 Bad Request`
+
+```json
+{
+    "status": 400,
+    "message": "Validation errors",
+    "data": [
+        {
+            "msg": "Email is required",
+            "param": "email",
+            "location": "body"
+        }
+    ]
+}
+```
+
+**Code** : `404 Not Found`
+
+```json
+{
+    "status": 404,
+    "message": "Invalid email or password, please check and try again"
+}
+```
+
+**Code** : `500 Internal Server Error`
+
+```json
+{
+    "status": 500,
+    "message": "Error logging in user"
+}
+```
+
+### Update User Account
+
+**Method**: `PUT`
+**URL**: `https://localhost:3000/users/:id`
+**Auth required**: `False`
+
+**Limit requests**: 45 every 15 minutes
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Params**: `/userID`
+
+**Body**:
+
+```json
+{
+    "username": "newUserName",
+    "email": "newEmail@example.com",
+    "password": "newPass123"
+}
+```
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "User account updated successfully",
+      "data": {
+          "id": "userID",
+          "username": "newUserName",
+          "email": "newEmail@example.com"
+      }
+  }
+  ```
+
+**Error Responses**
+
+**Code** : `400 Bad Request`
+
+```json
+{
+    "status": 400,
+    "message": "Validation errors",
+    "data": [
+        {
+            "msg": "ID is required",
+            "param": "id",
+            "location": "params"
+        }
+    ]
+}
+```
+
+**Code** : `404 Not Found`
+
+```json
+{
+    "status": 404,
+    "message": "User not found"
+}
+```
+
+**Code** : `500 Internal Server Error`
+
+```json
+{
+    "status": 500,
+    "message": "Error updating user account"
+}
+```
+
+
+
+### Delete User Account
+
+**Method**: `DELETE`
+**URL**: `https://localhost:3000/users/:id`
+**Auth required**: `False`
+
+**Limit requests**: 10 every 10 minutes
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Params**: `/userID`
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "User account deleted successfully",
+      "data": {
+          "id": "userID",
+          "username": "exampleUser",
+          "email": "example@example.com"
+      }
+  }
+  ```
+
+**Error Responses**
+
+**Code** : `404 Not Found`
+
+```json
+{
+    "status": 404,
+    "message": "User not found"
+}
+```
+
+**Code** : `500 Internal Server Error`
+
+```json
+{
+    "status": 500,
+    "message": "Error deleting user account"
+}
+```
+
+
+
+
+
+## Notes API Documentation
+
+
+
+### Create Note
+
+**Method**: `POST`
+**URL**: `https://localhost:3000/notes`
+**Auth required**: `True`
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Body**:
+
+```json
+{
+    "title": "Sample Note Title",
+    "description": "This is a sample description for the note."
+}
+```
+
+**Success Responses**:
+
+- **Code**: `201 Created`
+
+  ```json
+  {
+      "status": "201",
+      "message": "Note created successfully",
+      "data": {
+          "_id": "noteID",
+          "title": "Sample Note Title",
+          "description": "This is a sample description for the note.",
+          "user_id": "userID",
+          "changes": [
+              {
+                  "title": "Sample Note Title",
+                  "description": "This is a sample description for the note.",
+                  "date": "date_created"
+              }
+          ],
+          "status": "visible"
+      }
+  }
+  ```
+
+**Error Responses**
+
+**Code** : `400 Bad Request`
+
+```json
+{
+    "status": 400,
+    "message": "Validation errors",
+    "data": [
+        {
+            "msg": "Title is required",
+            "param": "title",
+            "location": "body"
+        }
+    ]
+}
+```
+
+**Code**: `500 Internal Server Error`
+
+```json
+{
+    "status": "status code",
+    "message": "Description of error"
+}
+```
+
+
+
+### Get Notes
+
+**Method**: `GET`
+**URL**: `https://localhost:3000/notes`
+**Auth required**: `True`
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "Notes retrieved successfully",
+      "data": [
+          {
+              "_id": "noteID",
+              "title": "Sample Note Title",
+              "description": "This is a sample description.",
+              "user_id": "userID",
+              "changes": [],
+              "status": "visible"
+          }
+      ]
+  }
+  ```
+
+**Error**:
+
+- **Code**: `500 Internal Server Error`
+
+  ```json
+  {
+      "status": "500",
+      "message": "Error retrieving notes"
+  }
+  ```
+
+
+
+## Get Note by ID
+
+**Method**: `GET`
+**URL**: `https://localhost:3000/notes/:id`
+**Auth required**: `True`
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Params**: `/noteID`
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "Note retrieved successfully",
+      "data": {
+          "_id": "noteID",
+          "title": "Sample Note Title",
+          "description": "This is a sample description.",
+          "user_id": "userID",
+          "changes": [],
+          "status": "visible"
+      }
+  }
+  ```
+
+**Error Responses:**
+
+- **Code**: `404 Not Found`, 
+
+  ```json
+  {
+    "status": 404,
+    "message": "Note not found"
+  }
+  ```
+
+- **Code** `500 Internal Server Error`
+
+  ```json
+  {
+      "status": "status code",
+      "message": "Description of error"
+  }
+  ```
+
+
+
+## Search Notes
+
+**Method**: `GET`
+**URL**: `https://localhost:3000/notes/search`
+**Auth required**: `True`
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**URL Query**: `?query="searchTerm"`
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "Notes found successfully",
+      "data": [
+          {
+              "_id": "noteID",
+              "title": "Matched Note Title",
+              "description": "This is a matched description.",
+              "user_id": "userID",
+              "changes": [],
+              "status": "visible"
+          }
+      ]
+  }
+  ```
+
+**Error Responses:**
+
+- **Code**: `400 Bad Request`
+
+  ```json
+  {
+    "status": 400,
+    "message": "Query parameter is required and must be a string"
+  }
+  ```
+
+- **Code**: `404 Not Found`
+
+  ```json
+  {
+    "status": 404,
+    "message": "No notes found"
+  }
+  ```
+
+- **Code**: `500 Internal Server Error`
+
+  ```json
+  {
+    "status": 500,
+    "message": "Error searching notes"
+  }
+  ```
+
+
+
+## Get Note History
+
+**Method**: `GET`
+**URL**: `https://localhost:3000/notes/:id/history`
+**Auth required**: `True`
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Params**: `/noteID`
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "Note history retrieved successfully",
+      "data": [
+          {
+              "title": "Previous Note Title",
+              "description": "Previous description.",
+              "date": "date_of_change"
+          }
+      ]
+  }
+  ```
+
+**Error Responses:**
+
+- **Code**: `404 Not Found`, 
+
+  ```json
+  {
+    "status": 404,
+    "message": "Note not found"
+  }
+  ```
+
+- **Code** `500 Internal Server Error`
+
+  ```json
+  {
+    "status": 500,
+    "message": "Error retrieving note history"
+  }
+  ```
+
+
+
+## Update Note
+
+**Method**: `PUT`
+**URL**: `https://localhost:3000/notes/:id`
+**Auth required**: `True`
+
+**Header**:
+
+```json
+{
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
+}
+```
+
+**Params**: `/noteID`
+
+**Body**:
+
+```json
+{
+    "title": "Updated Note Title",
+    "description": "Updated description for the note."
+}
+```
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "Note updated successfully",
+      "data": {
+          "_id": "noteID",
+          "title": "Updated Note Title",
+          "description": "Updated description for the note.",
+          "user_id": "userID",
+          "changes": [
+              {
+                  "title": "Updated Note Title",
+                  "description": "Updated description for the note.",
+                  "date": "date_of_change"
+              }
+          ],
+          "status": "visible"
+      }
+  }
+  ```
+
+**Error Responses:**
+
+- **Code**: `400 Bad Request`, 
+
+  ```json
+  {
+    "status": 400,
+    "message": "Validation errors",
+    "data": [
+      {
+        "msg": "Title is required",
+        "param": "title",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **Code** `404 Not Found`
+
+  ```json
+  {
+    "status": 404,
+    "message": "Note not found"
+  }
+  ```
+
+- **Code** `500 Internal Server Error`
+
+  ```json
+  {
+    "status": 500,
+    "message": "Error updating note"
+  }
+  ```
+
+
 
 ------
 
-**Error** : ` 404 Not Found, 500 Internal Server Error ....  `
+## Delete Note
+
+**Method**: `DELETE`
+**URL**: `https://localhost:3000/notes/:id`
+**Auth required**: `True`
+
+**Header**:
 
 ```json
 {
-    "status":"status code", // https://http.cat/
-    "message": "Descripción del error"
+    "Content-Type": "application/json",
+    "x-version": "1.0.0"
 }
 ```
 
+**Params**: `/noteID`
+
+**Success Responses**:
+
+- **Code**: `200 OK`
+
+  ```json
+  {
+      "status": "200",
+      "message": "Note deleted successfully",
+      "data": {
+          "_id": "noteID",
+          "title": "Sample Note Title",
+          "description": "This is a sample description.",
+          "user_id": "userID",
+          "changes": [],
+          "status": "hidden"
+      }
+  }
+  ```
+
+**Error Responses:**
+
+- **Code**: `404 Not Found`, 
+
+  ```json
+  {
+    "status": 404,
+    "message": "Note not found"
+  }
+  ```
+
+- **Code** `500 Internal Server Error`
+
+  ```json
+  {
+    "status": 500,
+    "message": "Error deleting note"
+  }
+  ```
 
