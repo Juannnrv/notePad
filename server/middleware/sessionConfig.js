@@ -8,13 +8,14 @@ class SessionService {
         resave: false,
         saveUninitialized: false, 
         cookie: {
-          secure: false, 
-          httpOnly: true, 
+          secure: true, 
+          httpOnly: true,
           maxAge: 30 * 60 * 1000,
-          sameSite: 'lax'
+          sameSite: 'None' 
         },
       })
     );
+    
   }
 
   static setSession(req, key, value) {

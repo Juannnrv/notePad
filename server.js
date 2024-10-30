@@ -12,10 +12,11 @@ const SessionService = require("./server/middleware/sessionConfig");
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:4173", 
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 SessionService.initializeSession(app);
