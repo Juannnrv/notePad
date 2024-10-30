@@ -6,9 +6,9 @@
   "author": "Juan Rosas",
   "license": "ISC",
   "scripts": {
-    "dev:back": "node --env-file .env --watch server.js",
-    "dev:front": "vite",
-    "dev": "concurrently \"npm run dev:front\" \"npm run dev:back\"",
+    "start": "node --env-file .env --watch server.js",
+    "dev": "vite",
+    "app": "concurrently \"npm run dev\" \"npm run start\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

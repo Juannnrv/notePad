@@ -26,7 +26,7 @@ export default function EditNoteEditor() {
   const handleEdit = async () => {
     const note = { title, description };
     try {
-      const response = await fetch(`https://localhost:5000/notes/${id}`, {
+      const response = await fetch(`http://localhost:5000/notes/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

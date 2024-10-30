@@ -1,12 +1,10 @@
 const session = require('express-session');
-const fs = require("fs");
-const secret = fs.readFileSync("certificate.csr", "utf8");
 
 class SessionService {
   static initializeSession(app) {
     app.use(
       session({
-        secret: secret,
+        secret: `${process.env.JWT_SECRET}`,
         resave: false,
         saveUninitialized: false, 
         cookie: {

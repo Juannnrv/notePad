@@ -12,7 +12,7 @@ const useFetch = (initialEndpoint) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`https://localhost:5000/notes${endpoint}`, {
+      const response = await fetch(`http://localhost:5000/notes${endpoint}`, {
         headers: {
           "Content-Type": "application/json",
           "x-version": "1.0.0",

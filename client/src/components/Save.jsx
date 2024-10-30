@@ -17,7 +17,7 @@ export default function NoteEditor() {
   const handleSave = async () => {
     const note = { title, description };
     try {
-      const response = await fetch("https://localhost:5000/notes", {
+      const response = await fetch("http://localhost:5000/notes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
