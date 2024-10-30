@@ -6,7 +6,7 @@
   "author": "Juan Rosas",
   "license": "ISC",
   "scripts": {
-    "start": "node --env-file .env --watch server.js",
+    "start": "node --env-file .env server.js",
     "dev": "vite",
     "app": "concurrently \"npm run dev\" \"npm run start\"",
     "build": "vite build",

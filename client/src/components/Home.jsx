@@ -59,7 +59,7 @@ const NotesList = () => {
         setErrorSearch(null);
         try {
           const response = await fetch(
-            `http://localhost:5000/notes/search?query=${searchQuery}`,
+            `https://note-pad-api.vercel.app/notes/search?query=${searchQuery}`,
             {
               method: "GET",
               headers: {
@@ -104,7 +104,7 @@ const NotesList = () => {
 
   const handleDeleteNote = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/notes/${id}`, {
+      const response = await fetch(`https://note-pad-api.vercel.app/notes/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

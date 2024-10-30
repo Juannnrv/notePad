@@ -12,7 +12,7 @@ const SessionService = require("./server/middleware/sessionConfig");
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://localhost:4173"], 
     credentials: true,
   })
 );
@@ -44,7 +44,6 @@ app.use(errorHandler);
 // httpsServer.listen(PORT, () => {
 //   console.log(`Server is running on port ${PORT}`);
 // });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
