@@ -17,6 +17,7 @@ const useAuth = () => {
         },
         body: JSON.stringify(data),
         credentials: 'include', 
+        mode: "cors"
       });
 
       if (!response.ok) {

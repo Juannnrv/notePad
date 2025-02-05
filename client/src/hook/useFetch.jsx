@@ -18,6 +18,7 @@ const useFetch = (initialEndpoint) => {
           "x-version": "1.0.0",
         },
         credentials: "include",
+        mode: "cors"
       });
 
       if (!response.ok) {
