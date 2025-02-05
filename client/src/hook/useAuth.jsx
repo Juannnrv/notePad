@@ -7,6 +7,7 @@ const useAuth = () => {
   const authenticate = async (url, data) => {
     setLoading(true);
     setError(null);
+    console.log(`https://note-pad-api.vercel.app${url}`)
     try {
       const response = await fetch(`https://note-pad-api.vercel.app${url}`, {
         method: "POST",

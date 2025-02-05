@@ -12,7 +12,7 @@ const SessionService = require("./server/middleware/sessionConfig");
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:4173"], 
+    origin: ["http://localhost:3000", "http://localhost:4173", "https://juannnrv.github.io/notePad/"], 
     credentials: true,
   })
 );
